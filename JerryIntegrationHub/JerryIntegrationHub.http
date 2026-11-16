@@ -1,0 +1,6 @@
+@JerryIntegrationHub_HostAddress = http://localhost:5264
+
+GET {{JerryIntegrationHub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
