@@ -16,8 +16,6 @@ public class Program
 
         app.MapControllers();
 
-        app.MapGet("/", () => "Jerry Integration Hub Online");
-
         app.Run();
     }
 }
