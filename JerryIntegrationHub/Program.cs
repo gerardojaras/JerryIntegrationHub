@@ -3,6 +3,7 @@ using JerryIntegrationHub.Middleware;
 using JerryIntegrationHub.Services;
 using JerryIntegrationHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace JerryIntegrationHub;
 
@@ -16,10 +17,28 @@ public class Program
 
         builder.Services.AddControllers();
         
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        Console.WriteLine($"PGHOST: {builder.Configuration["TEST_HOST"]}");
+        Console.WriteLine($"PGDATABASE: {builder.Configuration["TEST_DB"]}");
+        Console.WriteLine($"PGUSER: {builder.Configuration["TEST_USER"]}");
+
+        var connectionString =
+            builder.Configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
         {
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
+            connectionString =
+                new NpgsqlConnectionStringBuilder
+                {
+                    Host = builder.Configuration["PGHOST"],
+                    Port = int.Parse(builder.Configuration["PGPORT"]!),
+                    Database = builder.Configuration["PGDATABASE"],
+                    Username = builder.Configuration["PGUSER"],
+                    Password = builder.Configuration["PGPASSWORD"]
+                }.ConnectionString;
+        }
+
+        builder.Services.AddDbContext<ApplicationDbContext>(
+            options => options.UseNpgsql(connectionString));
 
         var app = builder.Build();
         
