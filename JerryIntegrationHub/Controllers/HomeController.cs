@@ -15,6 +15,7 @@ public class HomeController: ControllerBase
             Status = "Online",
             Version = "0.1.0",
             Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+            ServerTimeUtc = DateTimeOffset.UtcNow,
         });
     }
 }

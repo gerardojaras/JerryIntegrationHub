@@ -1,18 +1,22 @@
 ﻿# Jerry Integration Hub
 
-A modern backend integration platform built with:
+A backend integration platform built with:
 
 - .NET 10
 - ASP.NET Core
-- Docker
-- PostgreSQL
+- GitHub
 - Railway
-- OpenAPI
 
-## Planned Features
+## Current Features
 
+- Home endpoint
+- Health endpoint
+- Automated cloud deployment
+
+## Upcoming Features
+
+- PostgreSQL persistence
 - Customer Management API
 - Webhook Processing
-- AI Integrations
-- Odoo Integrations
-- Audit Logging
+- Odoo Integration
+- OpenAPI Documentation
