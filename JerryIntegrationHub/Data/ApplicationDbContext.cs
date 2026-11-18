@@ -8,5 +8,10 @@ public class ApplicationDbContext: DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
     {}
 
-    public DbSet<Customer> Customer => Set<Customer>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Customer>().HasIndex(x => x.CustomerCode).IsUnique();
+    }
+
+    public DbSet<Customer> Customers => Set<Customer>();
 }

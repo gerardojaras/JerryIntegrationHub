@@ -52,7 +52,10 @@ namespace JerryIntegrationHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.HasIndex("CustomerCode")
+                        .IsUnique();
+
+                    b.ToTable("Customers");
                 });
 #pragma warning restore 612, 618
         }
