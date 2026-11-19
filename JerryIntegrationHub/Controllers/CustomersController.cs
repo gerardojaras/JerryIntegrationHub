@@ -33,4 +33,29 @@ public class CustomersController(ICustomerService customerService): ControllerBa
         var customer = await customerService.CreateAsync(request, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<CustomerResponse>> Update(Guid id, UpdateCustomerRequest request, CancellationToken cancellationToken)
+    {
+        var customer = await customerService.UpdateAsync(
+            id,
+            request,
+            cancellationToken);
+        
+        return customer is null ? NotFound() : Ok(customer);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        var success = await customerService.DeactivateAsync(id, cancellationToken);
+        return success ? NoContent() : NotFound();
+    }
+
+    [HttpPost("{id:guid}/activate")]
+    public async Task<IActionResult> Activate(Guid id, CancellationToken cancellationToken)
+    {
+        var success = await customerService.ActivateAsync(id, cancellationToken);
+        return success ? NoContent() : NotFound();
+    }
 }

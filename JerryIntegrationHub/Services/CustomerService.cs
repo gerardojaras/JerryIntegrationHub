@@ -12,6 +12,7 @@ public class CustomerService(ApplicationDbContext dbContext) : ICustomerService
     {
         return await dbContext.Customers
             .AsNoTracking()
+            .Where(x => x.IsActive)
             .OrderBy(c => c.Name)
             .ToListAsync(cancellationToken: cancellationToken);
     }
@@ -60,5 +61,56 @@ public class CustomerService(ApplicationDbContext dbContext) : ICustomerService
                 IsActive = x.IsActive,
                 CreatedUtc =  x.CreatedAtUtc,
             }).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<CustomerResponse?> UpdateAsync(Guid id, UpdateCustomerRequest request, CancellationToken cancellationToken)
+    {
+        var customer = await dbContext.Customers
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (customer is null) return null;
+
+        customer.CustomerCode = request.CustomerCode;
+        customer.Name = request.Name;
+        customer.Email = request.Email;
+        customer.PhoneNumber = request.PhoneNumber;
+        customer.IsActive = request.IsActive;
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new CustomerResponse
+        {
+            Id = customer.Id,
+            CustomerCode = customer.CustomerCode,
+            Name = customer.Name,
+            Email = customer.Email,
+            PhoneNumber = customer.PhoneNumber,
+            IsActive = customer.IsActive,
+            CreatedUtc = customer.CreatedAtUtc,
+        };
+    }
+
+    public async Task<bool> DeactivateAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var customer = await dbContext.Customers
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (customer is null) return false;
+        customer.IsActive = false;
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<bool> ActivateAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var customer = await dbContext.Customers
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (customer is null) return false;
+        
+        customer.IsActive = true;
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }
