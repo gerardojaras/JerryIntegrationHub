@@ -1,5 +1,6 @@
 ﻿using JerryIntegrationHub.Data;
 using JerryIntegrationHub.Dtos;
+using JerryIntegrationHub.Exceptions;
 using JerryIntegrationHub.Models;
 using JerryIntegrationHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,14 @@ public class CustomerService(ApplicationDbContext dbContext) : ICustomerService
     
     public async Task<CustomerResponse> CreateAsync(CreateCustomerRequest request, CancellationToken cancellationToken)
     {
+        var customerExists = await dbContext.Customers.AnyAsync(
+            x => x.CustomerCode == request.CustomerCode, cancellationToken);
+
+        if (customerExists)
+        {
+            throw new CustomerAlreadyExistsException(request.CustomerCode);
+        }
+        
         var customer = new Customer
         {
             Id = Guid.NewGuid(),
