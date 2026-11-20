@@ -14,4 +14,5 @@ public class ApplicationDbContext: DbContext
     }
 
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<WebhookEvent> WebhookEvents => Set<WebhookEvent>();
 }
