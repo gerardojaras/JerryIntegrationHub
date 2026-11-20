@@ -6,11 +6,11 @@ public sealed class CreateWebhookEventRequest
 {
     [Required]
     [MaxLength(100)]
-    public string SourceSystem { get; set; } = string.Empty;
+    public string SourceSystem { get; init; } = string.Empty;
     [Required]
     [MaxLength(100)]
-    public string EventType { get; set; } = string.Empty;
+    public string EventType { get; init; } = string.Empty;
     [Required]
-    public string Payload { get; set; } = string.Empty;
+    public string Payload { get; init; } = string.Empty;
     
 }

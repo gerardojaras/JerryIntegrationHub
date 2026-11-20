@@ -48,4 +48,20 @@ public class WebhookEventService(ApplicationDbContext dbContext): IWebhookEventS
             })
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<WebhookEventDetailResponse?> GetDetailsAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await dbContext.WebhookEvents
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(x => new WebhookEventDetailResponse
+            {
+                Id = x.Id,
+                SourceSystem = x.SourceSystem,
+                EventType = x.EventType,
+                Payload = x.Payload,
+                ReceivedAtUtc = x.ReceivedAtUtc,
+                Processed = x.Processed
+            }).FirstOrDefaultAsync(cancellationToken);
+    }
 }

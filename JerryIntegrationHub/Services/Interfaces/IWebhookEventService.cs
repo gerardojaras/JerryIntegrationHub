@@ -6,4 +6,5 @@ public interface IWebhookEventService
 {
     Task<WebhookEventResponse> CreateAsync(CreateWebhookEventRequest request, CancellationToken cancellationToken);
     Task<IEnumerable<WebhookEventResponse>> GetAllAsync(CancellationToken cancellationToken);
+    Task<WebhookEventDetailResponse?> GetDetailsAsync(Guid id, CancellationToken cancellationToken);
 }
