@@ -18,10 +18,6 @@ public class Program
 
         builder.Services.AddControllers();
         
-        Console.WriteLine($"PGHOST: {builder.Configuration["TEST_HOST"]}");
-        Console.WriteLine($"PGDATABASE: {builder.Configuration["TEST_DB"]}");
-        Console.WriteLine($"PGUSER: {builder.Configuration["TEST_USER"]}");
-
         var connectionString =
             builder.Configuration.GetConnectionString("DefaultConnection");
 

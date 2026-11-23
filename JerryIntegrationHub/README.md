@@ -25,3 +25,5 @@
 - Business Exception Handling
 - Correlation IDs
 - Dependency Injection
+
+![Build](https://github.com/.../actions/workflows/build.yml/badge.svg)
