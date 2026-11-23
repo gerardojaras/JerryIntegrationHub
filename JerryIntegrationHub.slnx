@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="JerryIntegrationHub.Tests/JerryIntegrationHub.Tests.csproj" />
   <Project Path="JerryIntegrationHub/JerryIntegrationHub.csproj" />
 </Solution>

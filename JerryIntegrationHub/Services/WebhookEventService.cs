@@ -64,4 +64,17 @@ public class WebhookEventService(ApplicationDbContext dbContext): IWebhookEventS
                 Processed = x.Processed
             }).FirstOrDefaultAsync(cancellationToken);
     }
+
+    public async Task<bool> ProcessAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var webhookEvent = await dbContext.WebhookEvents
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        
+        if(webhookEvent is null) return false;
+        
+        webhookEvent.Processed = true;
+        
+        await  dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
 }

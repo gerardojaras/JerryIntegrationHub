@@ -15,7 +15,7 @@ public class WebhookEventsController(IWebhookEventService webhookEventService) :
         return Ok(webhookEvents);
     }
 
-    [HttpGet("{id: guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult<WebhookEventDetailResponse>> GetById(Guid id, CancellationToken cancellationToken)
     {
         var webhookEvent = await webhookEventService.GetDetailsAsync(id, cancellationToken);
@@ -29,5 +29,12 @@ public class WebhookEventsController(IWebhookEventService webhookEventService) :
     {
         var webhookEvents = await webhookEventService.CreateAsync(request, cancellationToken);
         return Created(string.Empty, webhookEvents);
+    }
+
+    [HttpPost("{id:guid}/process")]
+    public async Task<IActionResult> Process(Guid id, CancellationToken cancellationToken)
+    {
+        var success = await webhookEventService.ProcessAsync(id, cancellationToken);
+        return success ? NoContent() : NotFound();
     }
 }
