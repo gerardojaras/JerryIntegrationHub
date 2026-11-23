@@ -6,9 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JerryIntegrationHub.Services;
 
-public class WebhookEventService(ApplicationDbContext dbContext): IWebhookEventService
+public class WebhookEventService(
+    ApplicationDbContext dbContext, 
+    IWebhookProcessor webhookProcessor) 
+    : IWebhookEventService
 {
-    public async Task<WebhookEventResponse> CreateAsync(CreateWebhookEventRequest request, CancellationToken cancellationToken)
+    public async Task<WebhookEventResponse> CreateAsync(
+        CreateWebhookEventRequest request, CancellationToken cancellationToken)
     {
         var webhookEvent = new WebhookEvent
         {
@@ -72,9 +76,12 @@ public class WebhookEventService(ApplicationDbContext dbContext): IWebhookEventS
         
         if(webhookEvent is null) return false;
         
+        await webhookProcessor.ProcessAsync(webhookEvent, cancellationToken);
+        
         webhookEvent.Processed = true;
         
         await  dbContext.SaveChangesAsync(cancellationToken);
+        
         return true;
     }
 }

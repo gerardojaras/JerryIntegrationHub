@@ -15,6 +15,7 @@ public class Program
         
         builder.Services.AddScoped<ICustomerService, CustomerService>();
         builder.Services.AddScoped<IWebhookEventService, WebhookEventService>();
+        builder.Services.AddScoped<IWebhookProcessor, WebhookProcessor>();
 
         builder.Services.AddControllers();
         
